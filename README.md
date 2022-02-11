@@ -33,7 +33,7 @@ Make sure to understand docker build context before running the code or attempti
 There are 2 different .net solutions in the repository to account for an api and app.  Each one has it's own Dockerfile for containerization
 
 Folder structure is as follows
-
+```
 ├── .gitignore
 ├── docker-compose.yml
 ├── blazor_app
@@ -52,6 +52,7 @@ Folder structure is as follows
 │   │   ├── .dockerignore
 │   │   ├── nginx.conf
 │   │   ├── Other app files
+```
 
 Each solution can be run independently via an IDE or images/containers for debugging purposes.  They both can be run together at the same time via docker-compose.
 
