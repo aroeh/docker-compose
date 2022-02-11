@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # cache:
+  #   image: redis
+  #   restart: always
+  #   ports:
+  #     - 6379:6379
+    # command: redis-server --save 20 1 --loglevel warning --requirepass <password> # authentication command
+    # volumes: # volume binding for persistent cache
+    #   - cache:/data
+
+  weather_api:
+    image: ${DOCKER_REGISTRY-}weatherapi
+    build:
+      context: ./weather_api/weather_api
+      dockerfile: Dockerfile
+    ports:
+      - 6001:80
+    #   - 6002:443
+    # environment:
+    #   - ASPNETCORE_URLS=https://+:443;http://+:80
+    #   - ASPNETCORE_HTTPS_PORT=6002
+    #   - ASPNETCORE_Kestrel__Certificates__Default__Password=certpassword
+    #   - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/dockerquickstart.pfx
+    # volumes:
+    #   - ~/.aspnet/https:/https:ro
+
+  blazor_app:
+    image: ${DOCKER_REGISTRY-}webapp
+    build:
+      context: ./blazor_app/blazor_app
+      dockerfile: Dockerfile
+    ports:
+      - 4001:80
+    #   - 4002:443
+    # environment:
+    #   - ASPNETCORE_URLS=https://+:443;http://+:80
+    # volumes:
+    #   - ~/.aspnet/https:/https:ro
