@@ -6,9 +6,9 @@ services:
   #   restart: always
   #   ports:
   #     - 6379:6379
-    # command: redis-server --save 20 1 --loglevel warning --requirepass <password> # authentication command
-    # volumes: # volume binding for persistent cache
-    #   - cache:/data
+  #   command: redis-server --save 20 1 --loglevel warning --requirepass <password> # authentication command
+  #   volumes: # volume binding for persistent cache
+  #     - cache:/data
 
   weather_api:
     image: ${DOCKER_REGISTRY-}weatherapi
@@ -38,3 +38,11 @@ services:
     #   - ASPNETCORE_URLS=https://+:443;http://+:80
     # volumes:
     #   - ~/.aspnet/https:/https:ro
+  
+  angular_app:
+    image: ${DOCKER_REGISTRY-}angularapp
+    build:
+      context: ./angular_app/angular_app
+      dockerfile: Dockerfile
+    ports:
+      - 5001:80

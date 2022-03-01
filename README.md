@@ -23,6 +23,9 @@ This repository is an experiment to see if we can simulate a local development s
     - Engine v20.10.12
     - Compose v1.29.2
 - .Net6
+- Node.js v17.6.0
+- npm v8.5.2
+- AngularCLI v13.2.4
 
 # Getting Started
 
@@ -30,12 +33,19 @@ Make sure to understand docker build context before running the code or attempti
 
 # Solution Overview
 
-There are 2 different .net solutions in the repository to account for an api and app.  Each one has it's own Dockerfile for containerization
+There are 3 different solutions in the repository to account for different apps and technologies.  Each one has it's own Dockerfile for containerization.  Currently there are 2 .net apps and 1 angular app
 
 Folder structure is as follows
 ```
 ├── .gitignore
 ├── docker-compose.yml
+├── angular_app
+│   ├── angular_app
+│   │   ├── node_modules
+│   │   ├── src
+│   │   │   ├── App Code
+│   │   ├── angular.json
+│   │   ├── package.json
 ├── blazor_app
 │   ├── blazor_app.sln
 │   ├── blazor_app
@@ -54,7 +64,7 @@ Folder structure is as follows
 │   │   ├── Other app files
 ```
 
-Each solution can be run independently via an IDE or images/containers for debugging purposes.  They both can be run together at the same time via docker-compose.
+Each solution can be run independently via an IDE or images/containers for debugging purposes.  They can be run together at the same time via docker-compose.
 
 # Build and Run
 
