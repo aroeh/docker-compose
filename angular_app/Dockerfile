@@ -3,14 +3,14 @@
 # # docker build -t weatherimage .
 # # COPY sources use either the file name or . since the context is set as the directory containing the .csproj file
 
-# # Build context: /angular_app
+# # Build context: angular_app/angular_app
 
 # setting up the build image
 FROM node:latest AS build
 WORKDIR /source/app
 
 # copy the angular project and src files to the build
-# copy from repo source of angular_app to build destination of source/app/
+# copy from repo source of angular_app/angular_app to build destination of source/app/
 # doing short hand syntax to say copy root source to destination root
 COPY . .
 

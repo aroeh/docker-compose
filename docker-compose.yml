@@ -42,7 +42,7 @@ services:
   angular_app:
     image: ${DOCKER_REGISTRY-}angularapp
     build:
-      context: ./angular_app/angular_app
+      context: ./angular_app
       dockerfile: Dockerfile
     ports:
       - 5001:80
