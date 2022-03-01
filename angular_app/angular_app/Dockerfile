@@ -1,9 +1,4 @@
-# # The context refers to the source directory for the build
-# # This file is setup to run with the project file as the context
-# # docker build -t weatherimage .
-# # COPY sources use either the file name or . since the context is set as the directory containing the .csproj file
-
-# # Build context: /angular_app
+# Build context: /angular_app
 
 # setting up the build image
 FROM node:latest AS build
