@@ -111,4 +111,7 @@ These are the most common commands I found myself using in this project
 ## Docker Redis Commands
 | Command | Example |
 |---------|---------|
-| docker exec -i <container-name> redis-cli FLUSHALL | docker exec -i docker-multi-repo-sim-cache-1 redis-cli FLUSHALL |
+| docker exec -i <container-name> redis-cli FLUSHALL | 
+```
+docker exec -i docker-multi-repo-sim-cache-1 redis-cli FLUSHALL 
+```|
