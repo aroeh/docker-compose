@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  # cache:
-  #   image: redis
-  #   restart: always
-  #   ports:
-  #     - 6379:6379
+  cache:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
   #   command: redis-server --save 20 1 --loglevel warning --requirepass <password> # authentication command
   #   volumes: # volume binding for persistent cache
   #     - cache:/data
@@ -18,7 +18,13 @@ services:
     ports:
       - 6001:80
     #   - 6002:443
-    # environment:
+    depends_on:
+      - cache
+    links:
+      - cache
+    environment:
+      - REDIS_HOST=cache
+      - REDIS_PORT=6379
     #   - ASPNETCORE_URLS=https://+:443;http://+:80
     #   - ASPNETCORE_HTTPS_PORT=6002
     #   - ASPNETCORE_Kestrel__Certificates__Default__Password=certpassword

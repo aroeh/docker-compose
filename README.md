@@ -106,3 +106,9 @@ These are the most common commands I found myself using in this project
 | docker-compose down [options] | docker-compose down --rmi 'all'| [Docker Compose Down](https://docs.docker.com/compose/reference/down/) | When needing to make changes to a project you will have to rebuild the image and container.  This command made it easy to tear everything down very quickly to a clean state.  There might be a better way to do this though, but this was easy to use |
 | docker logs -f <container-name> | docker logs -f docker_quickstart_sln-cache-1 | [Docker Logs](https://docs.docker.com/engine/reference/commandline/logs/) | If the container is nested under a solution, then use the nester container name and not the name of the image as set in the compose file |
 | docker run [options] <image-name> |docker run redis| [Docker Logs](https://docs.docker.com/engine/reference/commandline/logs/) | This was handy for pulling down a single image to do some basic setup and testing before incorporating into the project and compose |
+| docker exec [options] [container] [command] | docker-compose -i docker-multi-repo-sim-cache-1 | [Docker exec](https://docs.docker.com/engine/reference/commandline/exec/) | Container and commands will depened on what you want or need to do.  For example you can redis cli commands in a docker redis container |
+
+## Docker Redis Commands
+| Command | Example |
+|---------|---------|
+| docker exec -i <container-name> redis-cli FLUSHALL | docker exec -i docker-multi-repo-sim-cache-1 redis-cli FLUSHALL |
