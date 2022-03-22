@@ -28,6 +28,8 @@ namespace weather_api.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IActionResult Get()
         {
+            _logger.LogInformation("getting weather forecast");
+
             _logger.LogInformation("checking cache for value");
             var cacheString = cacheDb.StringGet("weather");
             if (!string.IsNullOrWhiteSpace(cacheString))
@@ -52,6 +54,28 @@ namespace weather_api.Controllers
             cacheDb.StringSet("weather", JsonConvert.SerializeObject(weather));
 
             return Ok(weather);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Test()
+        {
+            try
+            {
+                _logger.LogInformation("testing http calls without bypassing the cert validation check");                
+                
+                var httpClient = new HttpClient();
+                _logger.LogInformation("initiating http request");
+                var response = await httpClient.GetAsync("https://microsoft.com/");
+
+                _logger.LogInformation($"api call complete: {response.StatusCode}");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
+                return StatusCode(StatusCodes.Status500InternalServerError, "http request failed");
+            }
         }
     }
 }
