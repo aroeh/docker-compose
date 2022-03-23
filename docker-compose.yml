@@ -41,6 +41,8 @@ services:
     image: ${DOCKER_REGISTRY-}blazorwasmapp
     networks:
       - default
+    depends_on:
+      - weather_api
     build:
       context: ./blazor_app/blazor_app
       dockerfile: Dockerfile
@@ -56,6 +58,8 @@ services:
     image: ${DOCKER_REGISTRY-}angularapp
     networks:
       - default
+    depends_on:
+      - weather_api
     build:
       context: ./angular_app
       dockerfile: Dockerfile
