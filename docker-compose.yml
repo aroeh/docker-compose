@@ -6,6 +6,7 @@ networks:
 services:
   cache:
     image: redis
+    container_name: redis-cache
     networks:
       - default
     restart: always
@@ -15,8 +16,34 @@ services:
   #   volumes: # volume binding for persistent cache
   #     - cache:/data
 
+  rabbitmq_mgmt: 
+    image: rabbitmq:management
+    container_name: msg-queue-admin-ui
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - default
+
+  weather_receiver:
+    image: ${DOCKER_REGISTRY-}weatherreceiver
+    container_name: weather-receiver
+    networks:
+      - default
+    build:
+      context: ./mq-receiver-service/mq-receiver-service
+      dockerfile: Dockerfile
+    ports:
+      - 7001:80
+    depends_on:
+      - rabbitmq_mgmt
+    environment:
+      - RABBITMQ_HOST=rabbitmq_mgmt
+      - ASPNETCORE_ENVIRONMENT=Development
+      
   weather_api:
     image: ${DOCKER_REGISTRY-}weatherapi
+    container_name: weather-api
     networks:
       - default
     build:
@@ -27,9 +54,13 @@ services:
       - 6002:443
     depends_on:
       - cache
+      - rabbitmq_mgmt
     environment:
       - REDIS_HOST=cache
       - REDIS_PORT=6379
+      - RABBITMQ_HOST=rabbitmq_mgmt
+      - RABBITMQ_QUEUE=weather
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_HTTPS_PORT=6002
       - ASPNETCORE_Kestrel__Certificates__Default__Password=certpassword
@@ -39,6 +70,7 @@ services:
 
   blazor_app:
     image: ${DOCKER_REGISTRY-}blazorwasmapp
+    container_name: blazor-app
     networks:
       - default
     depends_on:
@@ -56,6 +88,7 @@ services:
   
   angular_app:
     image: ${DOCKER_REGISTRY-}angularapp
+    container_name: angular-app
     networks:
       - default
     depends_on:

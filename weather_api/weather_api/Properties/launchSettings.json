@@ -16,7 +16,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "REDIS_HOST": "localhost",
-        "REDIS_PORT": "6379"
+        "REDIS_PORT": "6379",
+        "RABBITMQ_HOST": "localhost",
+        "RABBITMQ_QUEUE": "weather"
       },
       "applicationUrl": "http://localhost:6001",
       "dotnetRunMessages": true

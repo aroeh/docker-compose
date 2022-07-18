@@ -1,6 +1,11 @@
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using RabbitMQ.Client;
 using StackExchange.Redis;
+using System.Text;
+using weather_api.Models;
+using weather_api.Services;
 
 namespace weather_api.Controllers
 {
@@ -10,6 +15,7 @@ namespace weather_api.Controllers
     {
         private readonly IConnectionMultiplexer cache;
         private readonly IDatabase cacheDb;
+        private readonly IRabbitMQService rabbitMQ;
 
         private static readonly string[] Summaries = new[]
         {
@@ -18,11 +24,13 @@ namespace weather_api.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConnectionMultiplexer cacheCon)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConnectionMultiplexer cacheCon, IRabbitMQService rabbit)
         {
             _logger = logger;
             cache = cacheCon;
             cacheDb = cache.GetDatabase();
+
+            rabbitMQ = rabbit;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
@@ -54,6 +62,22 @@ namespace weather_api.Controllers
             cacheDb.StringSet("weather", JsonConvert.SerializeObject(weather));
 
             return Ok(weather);
+        }
+
+        [HttpPost(Name = "PublishDay")]
+        public async Task<IActionResult> Post([FromBody] string message)
+        {
+            _logger.LogInformation("new message received");
+
+            var queueMessage = new QueueMessage
+            {
+                Text = message
+            };
+
+            _logger.LogInformation("publishing message to queue");
+            rabbitMQ.Publish(message);
+
+            return Ok(message);
         }
     }
 }

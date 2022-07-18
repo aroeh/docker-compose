@@ -12,6 +12,9 @@ This repository is an experiment to see if we can simulate a local development s
 - [Docker Getting Started](https://docs.docker.com/get-started/)
 - [Docker Compose Context](https://docs.docker.com/compose/compose-file/compose-file-v3/#context)
 - [aroeh Docker Quickstart Repo](https://github.com/aroeh/docker-quickstart)
+- [RabbitMQ](https://www.rabbitmq.com/)
+- [Github - akeresztesgh RabbitmqSample](https://github.com/akeresztesgh/RabbitmqSample)
+- [Consuming RabbitMQ Messages In ASP.NET Core](https://www.c-sharpcorner.com/article/consuming-rabbitmq-messages-in-asp-net-core/)
 
 # Tools
 
@@ -54,13 +57,19 @@ Folder structure is as follows
 │   │   ├── .dockerignore
 │   │   ├── nginx.conf
 │   │   ├── Other app files
+├── mq-receiver-service
+│   ├── mq-receiver-service.sln
+│   ├── mq-receiver-service
+│   │   ├── mq-receiver-service.csproj
+│   │   ├── Dockerfile
+│   │   ├── .dockerignore
+│   │   ├── Other app files
 ├── weather_api
 │   ├── weather_api.sln
 │   ├── weather_api
 │   │   ├── weather_api.csproj
 │   │   ├── Dockerfile
 │   │   ├── .dockerignore
-│   │   ├── nginx.conf
 │   │   ├── Other app files
 ```
 

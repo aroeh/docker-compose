@@ -1,5 +1,4 @@
-using StackExchange.Redis;
-using weather_api.Services;
+using mq_receiver_service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var redisConfig = new ConfigurationOptions();
-redisConfig.EndPoints.Add($"{Environment.GetEnvironmentVariable("REDIS_HOST")}:{Environment.GetEnvironmentVariable("REDIS_PORT")}");
-var redis = ConnectionMultiplexer.Connect(redisConfig);
-builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
-
-builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
+builder.Services.AddHostedService<WeatherReceiver>();
 
 var app = builder.Build();
 
@@ -25,8 +19,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
