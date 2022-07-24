@@ -17,7 +17,8 @@
       "applicationUrl": "http://localhost:5066",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "RABBITMQ_HOST": "localhost"
+        "RABBITMQ_HOST": "localhost",
+        "MONGODB_CONNSTRING": "mongodb://AzureDiamond:hunter2@localhost:27017"
       }
     },
     "IIS Express": {

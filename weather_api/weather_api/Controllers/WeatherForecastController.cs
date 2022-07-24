@@ -11,6 +11,7 @@ namespace weather_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
     public class WeatherForecastController : ControllerBase
     {
         private readonly IConnectionMultiplexer cache;
@@ -68,11 +69,6 @@ namespace weather_api.Controllers
         public async Task<IActionResult> Post([FromBody] string message)
         {
             _logger.LogInformation("new message received");
-
-            var queueMessage = new QueueMessage
-            {
-                Text = message
-            };
 
             _logger.LogInformation("publishing message to queue");
             rabbitMQ.Publish(message);

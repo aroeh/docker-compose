@@ -1,3 +1,4 @@
+using mq_receiver_service.DataAccess;
 using mq_receiver_service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHostedService<WeatherReceiver>();
+builder.Services.AddSingleton<IMongoWeather, MongoWeather>();
 
 var app = builder.Build();
 
@@ -19,6 +21,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder => 
+    builder
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .WithMethods(new string[] { "GET", "POST", "PUT" })
+);
 
 app.UseAuthorization();
 

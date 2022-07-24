@@ -15,6 +15,8 @@ This repository is an experiment to see if we can simulate a local development s
 - [RabbitMQ](https://www.rabbitmq.com/)
 - [Github - akeresztesgh RabbitmqSample](https://github.com/akeresztesgh/RabbitmqSample)
 - [Consuming RabbitMQ Messages In ASP.NET Core](https://www.c-sharpcorner.com/article/consuming-rabbitmq-messages-in-asp-net-core/)
+- [MongoDB and Docker](https://www.mongodb.com/compatibility/docker)
+- [DockerHub Mongo](https://hub.docker.com/_/mongo)
 
 # Tools
 

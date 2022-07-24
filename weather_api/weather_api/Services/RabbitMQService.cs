@@ -33,7 +33,8 @@ namespace weather_api.Services
         {
             var queueMessage = new QueueMessage
             {
-                Text = message
+                Text = message,
+                Received = DateTime.UtcNow
             };
 
             logger.LogInformation("publishing message to queue");

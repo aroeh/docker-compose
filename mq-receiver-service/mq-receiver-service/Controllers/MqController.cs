@@ -1,19 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using mq_receiver_service.DataAccess;
 
 namespace mq_receiver_service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class MqController : ControllerBase
     {
-        public MqController()
+        private readonly IMongoWeather mongoWeather;
+
+        public MqController(IMongoWeather injectWeather)
         {
+            mongoWeather = injectWeather;
         }
 
-        [HttpPost(Name = "StartReceiver")]
-        public IActionResult Post()
+        [HttpGet(Name = "GetWeatherMessages")]
+        public async Task<IActionResult> Get()
         {
-            return Ok(true);
+            var messages = await mongoWeather.GetMessages();
+
+            return Ok(messages);
         }
     }
 }

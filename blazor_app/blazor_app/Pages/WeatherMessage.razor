@@ -1,0 +1,71 @@
+﻿@page "/messages"
+
+@inject HttpClient Http
+@inject IConfiguration Config
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>Type in a new forecast.  Click Refresh if you don't see the new message immediately</p>
+<input type="text" @bind="newForecast" />
+<button type="button" @onclick="AddNewForecast">Add</button>
+<button type="button" @onclick="GetForecastMessages">Refresh</button>
+
+@if (messages == null || !messages.Any())
+{
+    <p><em>No messages at this time...try a adding or refreshing</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date Received</th>
+                <th>Forecast</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var msg in messages)
+            {
+                <tr>
+                    <td>@msg.Id</td>
+                    <td>@msg.Received.ToString()</td>
+                    <td>@msg.Text</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private QueueMessage[] messages;
+    private string newForecast;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetForecastMessages();
+    }
+
+    private async Task GetForecastMessages()
+    {
+        messages = await Http.GetFromJsonAsync<QueueMessage[]>($"{Config["MqReceiver"]}/mq");
+    }
+
+    private async Task AddNewForecast()
+    {
+        var result = await Http.PostAsJsonAsync($"{Config["WeatherService"]}/weatherforecast", newForecast);
+        newForecast = string.Empty;
+        await GetForecastMessages();
+    }
+
+    public class QueueMessage
+    {
+        public string? Id { get; set; }
+
+        public string? Text { get; set; }
+
+        public DateTime? Received { get; set; }
+    }
+}

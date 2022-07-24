@@ -2,6 +2,10 @@
 {
     public class QueueMessage : IQueueMessage
     {
-        public string Text { get; set; }
+        public string? Id { get; set; }
+
+        public string? Text { get; set; }
+
+        public DateTime? Received { get; set; }
     }
 }

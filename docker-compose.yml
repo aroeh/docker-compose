@@ -16,6 +16,16 @@ services:
   #   volumes: # volume binding for persistent cache
   #     - cache:/data
 
+  mongodb:
+    image: mongo
+    container_name: mongo-queue-db
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=AzureDiamond
+      - MONGO_INITDB_ROOT_PASSWORD=hunter2
+  
   rabbitmq_mgmt: 
     image: rabbitmq:management
     container_name: msg-queue-admin-ui
@@ -25,6 +35,22 @@ services:
     networks:
       - default
 
+  # azfunction_mq:
+  #   image: ${DOCKER_REGISTRY-}mqfunction
+  #   container_name: weather-receiver-function
+  #   networks:
+  #     - default
+  #   build:
+  #     context: ./docker_functions/docker_functions
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - rabbitmq_mgmt
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #   volumes:
+  #     - C:\Users\arroe\Source\Repos\Tutorials\docker-compose\docker_functions\docker_functions:/home/site/wwwroot
+  #     - C:\Users\arroe\Source\Repos\Tutorials\docker-compose\docker_functions:/src/
+  
   weather_receiver:
     image: ${DOCKER_REGISTRY-}weatherreceiver
     container_name: weather-receiver
@@ -37,9 +63,11 @@ services:
       - 7001:80
     depends_on:
       - rabbitmq_mgmt
+      - mongodb
     environment:
       - RABBITMQ_HOST=rabbitmq_mgmt
       - ASPNETCORE_ENVIRONMENT=Development
+      - MONGODB_CONNSTRING=mongodb://AzureDiamond:hunter2@mongodb
       
   weather_api:
     image: ${DOCKER_REGISTRY-}weatherapi
@@ -75,6 +103,7 @@ services:
       - default
     depends_on:
       - weather_api
+      - weather_receiver
     build:
       context: ./blazor_app/blazor_app
       dockerfile: Dockerfile

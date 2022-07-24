@@ -2,6 +2,10 @@
 {
     public interface IQueueMessage
     {
-        string Text { get; set; }
+        string? Id { get; set; }
+
+        string? Text { get; set; }
+
+        DateTime? Received { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using mq_receiver_service.Models;
+﻿using mq_receiver_service.DataAccess;
+using mq_receiver_service.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -9,12 +10,14 @@ namespace mq_receiver_service.Services
     public class WeatherReceiver : BackgroundService
     {
         private readonly ILogger<WeatherReceiver> logger;
+        private readonly IMongoWeather mongoWeather;
         private IModel channel;
         private IConnection connection;
 
-        public WeatherReceiver(ILogger<WeatherReceiver> logs)
+        public WeatherReceiver(ILogger<WeatherReceiver> logs, IMongoWeather weatherData)
         {
             logger = logs;
+            mongoWeather = weatherData;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -44,7 +47,7 @@ namespace mq_receiver_service.Services
             return Task.CompletedTask;
         }
 
-        private Task ReceiveData(object sender, BasicDeliverEventArgs @event)
+        private async Task ReceiveData(object sender, BasicDeliverEventArgs @event)
         {
             logger.LogInformation("Received new message on the queue");
             
@@ -54,7 +57,10 @@ namespace mq_receiver_service.Services
             channel.BasicAck(deliveryTag: @event.DeliveryTag, multiple: false);
             logger.LogInformation("Message receipt acknowledged");
 
-            return Task.CompletedTask;
+            //logger.LogInformation("Writing message to database");
+            await mongoWeather.InsertMessage(payload);
+
+            return;// Task.CompletedTask;
         }
 
         ~WeatherReceiver()
